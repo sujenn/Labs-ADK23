@@ -17,7 +17,13 @@ with open("../korpus", "r", encoding = "latin-1") as f:
                     word += f.read(1)
                 f.seek(byteCounter + 1)
                 I.write(word + " " + str(byteStart) + "\n")
-                byteStart = byteCounter + 1
+                nextChar = f.read(1)
+                if(nextChar.isalpha() == False):
+                    byteStart = byteCounter + 2
+                    byteCounter += 1
+                else:
+                    byteStart = byteCounter + 1
+                    f.seek(byteCounter + 1)
             elif(oneChar == ""):
                 break
 
