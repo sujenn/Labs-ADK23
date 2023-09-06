@@ -1,7 +1,5 @@
 
 def hashHelper(number):
-    #tänker att vi kanske kan lägga till "   " efter alla ord som inputas 
-    #klarar då av ord som t.ex i, ö, är
     if(number == 32):
         return 0
     elif(number < 123):
@@ -19,29 +17,25 @@ def hash(word):
 
     return((first*900)+(second*30)+third)
 
-'''
-print("Please enter a word:")
-userInput = input()
-print(hash(userInput)) '''
-
 aIndex = [-1]*27000
 
-byteCounter = 0
-def makeWord():
+def makeWord(byteC):
+    word = ""
     letter = f.read(1)  
-    byteCounter += 1          
+    byteC += 1          
     while(letter.isalpha() and len(word) < 3):
         word += letter
         letter = f.read(1)
-        byteCounter += 1
+        byteC += 1
     if(len(word) == 1):
         word = "  " + word
     elif(len(word) == 2):
         word = " " + word
-    return word
+    return [word, byteC]
 
 with open("../rawindex.txt", "r", encoding = "latin-1") as f:
-    word = makeWord()
+    byteCounter = 0
+    word, byteCounter = makeWord(byteCounter)
     for i in range (30):
         for j in range (30):
             for k in range (30):
@@ -49,13 +43,14 @@ with open("../rawindex.txt", "r", encoding = "latin-1") as f:
                 while(sameWord or hash(word) == i*900 + j*30 + k):
                     if(aIndex[(i*900)+(j*30)+k] == -1):
                         aIndex[(i*900)+(j*30)+k] = byteCounter
+                        print(str(word) + " " + str(byteCounter))
                     nextLetter = f.read(1)
                     while(nextLetter != "\\"):
                         nextLetter = f.read(1)
                         byteCounter += 1
                     f.read(1)
                     byteCounter += 2
-                    newWord = makeWord()
+                    newWord, byteCounter = makeWord(byteCounter)
                     if(word != newWord):
                         word = newWord
                         sameWord = False
