@@ -1,13 +1,17 @@
 
 def hashHelper(number):
-    if(number == 32):
-        return 0
-    elif(number < 123):
+    # a-z becomes 1-26
+    if(number > 96 and number < 123):
         return number - 96
-    elif(number < 230):
+    # å and ä becomes 27 resp. 28
+    elif(number == 228 or number == 229):
         return number - 201
-    else:
+    # ö becomes 29
+    elif(number == 246):
         return number - 217
+    # space and all other characters become 0
+    else:
+        return 0
 
 def hash(word):
     word += '   '
@@ -34,7 +38,7 @@ def makeWord(line):
     return word
 
 
-with open("../rawindex.txt", "r", encoding = "latin-1") as f:
+'''with open("../rawindex.txt", "r", encoding = "latin-1") as f:
     sameword = False
     byteStart = 0
     line = f.readline()
@@ -54,4 +58,26 @@ with open("../rawindex.txt", "r", encoding = "latin-1") as f:
             sameWord = True
         else:
             word = newWord
-            sameWord = False
+            sameWord = False'''
+print(hash("a"))
+#print(aIndex)
+#print("Detta är a: " + str(aIndex[0]))
+#print("Detta är a: " + str(aIndex[1]))
+
+
+'''with open("A.txt", "w") as A:
+    for line in aIndex:
+        A.write(str(line) + "\n")
+
+
+newList = []
+with open("A.txt", "r") as A:
+    while (True):
+        nextVar = A.readline()
+        if(nextVar == ""):
+            break
+        newList.append(nextVar)
+
+print(newList)
+print("Detta är a: " + str(newList[1]))'''
+        
