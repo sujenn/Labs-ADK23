@@ -33,6 +33,7 @@ def makeWord(line):
         word = word +  " "
     return word
 
+
 with open("../rawindex.txt", "r", encoding = "latin-1") as f:
     sameword = False
     byteStart = 0
@@ -54,3 +55,29 @@ with open("../rawindex.txt", "r", encoding = "latin-1") as f:
         else:
             word = newWord
             sameWord = False
+
+def searchAlg():
+    userInput = input().lower()
+    posA = hash(userInput)
+    posI = aIndex[posA]
+    posINext = aIndex[posA + 1]
+
+    with open("../rawindex.txt", "r", encoding = "latin-1") as I:
+        lower = posI
+        higher = posINext
+        while (higher - lower > 1000):
+            mid = (lower + higher) / 2
+            I.seek(mid)
+            lineList = I.readline().split()
+            if(lineList[0] <= userInput):
+                lower = mid
+            else:
+                higher = mid
+        I.seek(lower)
+        while(True):
+            lineList = I.readline().split()
+            if(lineList[0] == userInput):
+                with open("../korpus", "r", encoding = "latin-1") as L:
+                    return lineList[1]
+            if(lineList[0] > userInput):
+                return "Not found"
