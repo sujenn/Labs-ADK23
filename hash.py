@@ -19,46 +19,44 @@ def hash(word):
 
 aIndex = [-1]*27000
 
-def makeWord(byteC):
+def makeWord(byteIndex):
     word = ""
     letter = f.read(1)  
-    byteC += 1          
+    byteC = byteIndex + 1         
     while(letter.isalpha() and len(word) < 3):
         word += letter
         letter = f.read(1)
         byteC += 1
     if(len(word) == 1):
-        word = "  " + word
+        word = word + "  "
     elif(len(word) == 2):
-        word = " " + word
-    return [word, byteC]
+        word = word +  " "
+    return [word, byteC, byteIndex]
 
 with open("../rawindex.txt", "r", encoding = "latin-1") as f:
+    sameword = False
     byteCounter = 0
-    word, byteCounter = makeWord(byteCounter)
-    for i in range (30):
-        for j in range (30):
-            for k in range (30):
-                sameWord = False
-                while(sameWord or hash(word) == i*900 + j*30 + k):
-                    if(aIndex[(i*900)+(j*30)+k] == -1):
-                        aIndex[(i*900)+(j*30)+k] = byteCounter
-                        print(str(word) + " " + str(byteCounter))
-                    nextLetter = f.read(1)
-                    while(nextLetter != "\\"):
-                        nextLetter = f.read(1)
-                        byteCounter += 1
-                    f.read(1)
-                    byteCounter += 2
-                    newWord, byteCounter = makeWord(byteCounter)
-                    if(word != newWord):
-                        word = newWord
-                        sameWord = False
-                    else:
-                        sameWord = True
+    byteIndex = 0
+    word, byteCounter, byteIndex = makeWord(byteIndex)
+    f.seek(byteCounter)
 
-print("Här kommer den första: " + str(aIndex[0]))
-print("Här kommer den andra: " + str(aIndex[1]))
+    while(f.read(1) != ""):
+        byteCounter += 1
+        if(sameword == False):
+           indexPos = hash(word)
+        if(aIndex[indexPos] == -1):
+            aIndex[indexPos] = byteIndex
+            print(word + " " + str(aIndex[indexPos]))
+        nextLetter = f.read(1)
+        byteCounter += 1
+        while(nextLetter != "\n"):
+            nextLetter = f.read(1)
+            byteCounter += 1
 
+        newWord, byteCounter, byteIndex = makeWord(byteCounter)
 
-        
+        if(word == newWord):
+            sameWord = True
+        else:
+            word = newWord
+            sameWord = False
