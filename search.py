@@ -1,3 +1,5 @@
+import math
+
 def hashHelper(number):
     # a-z becomes 1-26
     if(number > 96 and number < 123):
@@ -30,7 +32,6 @@ with open("A.txt", "r", encoding = "latin-1") as A:
 
 def searchAlg():
     print("Write your search word: ")
-    print(aIndex[900])
     userInput = input().lower()
     posA = hash(userInput)
     posI = aIndex[posA]
@@ -42,19 +43,9 @@ def searchAlg():
     with open("../rawindex.txt", "r", encoding = "latin-1") as I:
         lower = int(posI)
         higher = int(posINext)
-        '''while (higher - lower > 1000):
-            mid = (lower + higher) / 2
-            I.seek(mid)
-            I.readline()
-            lineList = I.readline().split()
-            if(lineList[0] < userInput):
-                lower = mid
-            if(lineList[0] > userInput):
-                higher = mid
-            else:
-                lower'''
-        while (True):
-            mid = (lower + higher) / 2
+        
+        while (higher > lower):
+            mid = math.floor((lower + higher) / 2)
             I.seek(mid)
             I.readline
             lineList = I.readline().split()
@@ -63,9 +54,7 @@ def searchAlg():
             elif(lineList[0] > userInput):
                 higher = mid + 1
             else:
-                higher -= 1
-                if(higher == lower):
-                    break
+                higher = mid 
                 
         I.seek(lower)
         lineList = []
@@ -79,4 +68,4 @@ def searchAlg():
                 #return "Not found"
                 return lineList
 
-print(searchAlg())
+print(searchAlg()[0])
