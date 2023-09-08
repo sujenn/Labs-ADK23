@@ -38,7 +38,7 @@ def makeWord(line):
     return word
 
 
-'''with open("../rawindex.txt", "r", encoding = "latin-1") as f:
+with open("../rawindex.txt", "r", encoding = "latin-1") as f:
     sameword = False
     byteStart = 0
     line = f.readline()
@@ -58,19 +58,19 @@ def makeWord(line):
             sameWord = True
         else:
             word = newWord
-            sameWord = False'''
-print(hash("a"))
+            sameWord = False
+#print(hash("a"))
 #print(aIndex)
 #print("Detta är a: " + str(aIndex[0]))
 #print("Detta är a: " + str(aIndex[1]))
 
 
-'''with open("A.txt", "w") as A:
+with open("A.txt", "a") as A:
     for line in aIndex:
         A.write(str(line) + "\n")
 
 
-newList = []
+'''newList = []
 with open("A.txt", "r") as A:
     while (True):
         nextVar = A.readline()
