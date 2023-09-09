@@ -15,7 +15,10 @@ def hashHelper(number):
         return 0
 
 def hash(word):
-    word += '   '
+    if(len(word) == 1):
+        word = "  " + word
+    elif(len(word) == 2):
+        word = " " + word
     first = hashHelper(ord(word[0].lower()))
     second = hashHelper(ord(word[1].lower()))
     third = hashHelper(ord(word[2].lower()))
@@ -47,19 +50,22 @@ def searchAlg():
         while (higher > lower):
             mid = math.floor((lower + higher) / 2)
             I.seek(mid)
-            I.readline
+            I.readline()
             lineList = I.readline().split()
             if(lineList[0] < userInput):
-                lower = mid - 1
+                lower = mid + 1
             elif(lineList[0] > userInput):
-                higher = mid + 1
+                higher = mid - 1
             else:
                 higher = mid 
                 
         I.seek(lower)
         lineList = []
         while(True):
-            lineWord = I.readline().split()
+            lineWord = I.readline()
+            if(lineWord == "\n"):
+                return lineList
+            lineWord = lineWord.split()
             if(lineWord[0] == userInput):
                 #with open("../korpus", "r", encoding = "latin-1") as L:
                 #return lineList[1]
@@ -68,4 +74,10 @@ def searchAlg():
                 #return "Not found"
                 return lineList
 
-print(searchAlg()[0])
+answer = searchAlg()
+if(len(answer) == 0):
+    print("Not found")
+else:
+    print(answer[0][1])
+
+#Vid sökning av siffror blir det error. ValueError: negative seek position -1
