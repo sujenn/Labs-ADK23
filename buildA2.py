@@ -14,7 +14,10 @@ def hashHelper(number):
         return 0
 
 def hash(word):
-    word += '   '
+    if(len(word) == 1):
+        word = "  " + word
+    elif(len(word) == 2):
+        word = " " + word
     first = hashHelper(ord(word[0].lower()))
     second = hashHelper(ord(word[1].lower()))
     third = hashHelper(ord(word[2].lower()))
@@ -32,22 +35,22 @@ def makeWord(line):
         word += line[i]
         i += 1
     if(len(word) == 1):
-        word = word + "  "
+        word = "  " + word
     elif(len(word) == 2):
-        word = word +  " "
+        word = " " + word
     return word
 
 
 with open("../rawindex.txt", "r", encoding = "latin-1") as f:
-    sameword = False
+    sameWord = False
     byteStart = 0
     line = f.readline()
-    
+    word = makeWord(line)
+
     while(True):
-        word = makeWord(line)
         if(word == ""):
             break
-        if(sameword == False):
+        if(sameWord == False):
             indexPos = hash(word)
             if(aIndex[indexPos] == -1):
                 aIndex[indexPos] = byteStart
@@ -59,25 +62,10 @@ with open("../rawindex.txt", "r", encoding = "latin-1") as f:
         else:
             word = newWord
             sameWord = False
-#print(hash("a"))
-#print(aIndex)
-#print("Detta är a: " + str(aIndex[0]))
-#print("Detta är a: " + str(aIndex[1]))
 
 
 with open("A.txt", "a") as A:
     for line in aIndex:
         A.write(str(line) + "\n")
 
-
-'''newList = []
-with open("A.txt", "r") as A:
-    while (True):
-        nextVar = A.readline()
-        if(nextVar == ""):
-            break
-        newList.append(nextVar)
-
-print(newList)
-print("Detta är a: " + str(newList[1]))'''
         
