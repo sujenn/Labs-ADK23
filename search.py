@@ -57,7 +57,7 @@ def searchAlg():
             elif(lineList[0] > userInput):
                 higher = mid - 1
             else:
-                higher = mid 
+                higher = mid
                 
         I.seek(lower)
         lineList = []
@@ -67,17 +67,29 @@ def searchAlg():
                 return lineList
             lineWord = lineWord.split()
             if(lineWord[0] == userInput):
-                #with open("../korpus", "r", encoding = "latin-1") as L:
-                #return lineList[1]
                 lineList.append(lineWord)
             if(lineWord[0] > userInput):
-                #return "Not found"
-                return lineList
+                if(len(lineList) == 0):
+                    return -1
+                else:
+                    with open("../korpus", "r", encoding = "latin-1") as L:
+                        L.seek(int(lineList[0][1]) - 30)    #Få det att funka på första o sista test case också
+                        answerLine = ""
+                        ansChar = L.read(1)
+                        charCount = 0
+                        while(charCount < 60): 
+                            if(ansChar != "\n"):
+                                answerLine += ansChar
+                            ansChar = L.read(1)
+                            charCount += 1
+                        return answerLine
+                        #return(L.read(60))
+                #return lineList
 
 answer = searchAlg()
-if(len(answer) == 0):
+if(answer == -1):
     print("Not found")
 else:
-    print(answer[0][1])
+    print(answer)
 
 #Vid sökning av siffror blir det error. ValueError: negative seek position -1
