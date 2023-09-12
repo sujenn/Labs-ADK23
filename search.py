@@ -60,6 +60,8 @@ def findAmount(lower, userInput):
     with open("../rawindex.txt", "r", encoding = "latin-1") as I:
         I.seek(lower)
         lineWord = I.readline().split()
+        if(len(lineWord) == 0):                 #Stämmer detta, tvungen att lägga in för ööä
+            lineWord = I.readline().split()
         if(lineWord[0] < userInput):
             lineWord = I.readline().split()
         while(lineWord[0] == userInput):
@@ -101,8 +103,8 @@ def searchAlg(userInput):
 def findOccurrences(lower, userInput):
     with open("../rawindex.txt", "r", encoding = "latin-1") as I:
         count = 0
-        I.seek(lower)       #fixa för första ordet
-        I.readline()        #detta skapar probel för många ors som faktiskt hamnat på rätt plats
+        I.seek(lower)      
+        isFirstRun = True
         lineList = []
         while(count < 25):
             lineWord = I.readline()
@@ -116,7 +118,12 @@ def findOccurrences(lower, userInput):
                 lineList.append(lineWord)
                 count += 1
             else: 
-                break
+                if(isFirstRun == True):
+                    isFirstRun = False
+                    continue
+                else:
+                    break
+            isFirstRun = False
         return lineList
 
 def printk(lineList):
