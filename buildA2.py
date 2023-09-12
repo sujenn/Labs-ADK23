@@ -6,10 +6,30 @@ def hashHelper(number):
     # å and ä becomes 27 resp. 28
     elif(number >= 228 and number <= 230):
         return number - 201
-    # ö becomes 29
+    # ö and ø becomes 29
     elif(number == 246 or number == 248):
         return 29
     # space and all other characters become 0
+    elif(number >= 224 and number <= 227):
+        return 1
+    elif(number == 223):
+        return 19
+    elif(number == 231):
+        return 3
+    elif(number >= 232 and number <= 235):
+        return 5
+    elif(number >= 236 and number <= 239):
+        return 9
+    elif(number == 240):
+        return 4
+    elif(number == 241):
+        return 14
+    elif(number >= 242 and number <= 245):
+        return 15
+    elif(number >= 249 and number <= 252):
+        return 21
+    elif(number == 253 or number == 255):
+        return 25
     else:
         return 0
 
