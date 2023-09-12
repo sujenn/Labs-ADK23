@@ -1,7 +1,5 @@
 import math
 
-alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'å', 'ä', 'ö']
-
 def hashHelper(number):
     # a-z becomes 1-26
     if(number > 96 and number < 123):
@@ -85,24 +83,32 @@ def searchAlg(userInput):
         higher = int(posINext)
         
         while (higher > lower):
+            returnValue = lower
             mid = math.floor((lower + higher) / 2)
             I.seek(mid)
             I.readline()
             lineList = I.readline().split()
+            print(str(lineList[0]))
             if(lineList[0] < userInput):
                 lower = mid + 1
-            elif(lineList[0] > userInput):
-                higher = mid - 1
             else:
-                higher = mid
-    return lower
+                higher = mid - 1
+        print(lineList)
+        print(len(lineList[0]))
+        print(len(lineList[1]))
+        print(lower)
+        print(mid)
+        print(higher)
+        print(returnValue)
+        print(lower + (len(lineList[0]) + len(lineList[1])) + 2)
+        return lower + (len(lineList[0]) + len(lineList[1]))
 
 
 def findOccurrences(lower, userInput):
     with open("../rawindex.txt", "r", encoding = "latin-1") as I:
         count = 0
-        I.seek(lower)       #fixa för första ordet
-        I.readline()        #detta skapar probel för många ors som faktiskt hamnat på rätt plats
+        I.seek(lower)       
+        I.readline()        #detta skapar problem för många ord som faktiskt hamnat på rätt plats
         lineList = []
         while(count < 25):
             lineWord = I.readline()
@@ -149,17 +155,6 @@ def printk(lineList):
 
 print("Write your search word: ")
 userInput = input().lower()
-validWord = False
-while(validWord == False):
-    validChar = True
-    for letter in userInput:
-        if(letter not in alphabet):
-            validChar = False
-    if(validChar == True):
-        validWord = True
-    else:
-        print("Your word is not valid, try again!")
-        userInput = input().lower()  
 
 lower = searchAlg(userInput)
 amount = findAmount(lower, userInput)
