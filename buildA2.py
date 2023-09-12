@@ -4,11 +4,11 @@ def hashHelper(number):
     if(number > 96 and number < 123):
         return number - 96
     # å and ä becomes 27 resp. 28
-    elif(number == 228 or number == 229):
+    elif(number >= 228 and number <= 230):
         return number - 201
     # ö becomes 29
-    elif(number == 246):
-        return number - 217
+    elif(number == 246 or number == 248):
+        return 29
     # space and all other characters become 0
     else:
         return 0
