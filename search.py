@@ -1,5 +1,7 @@
 import math
 
+alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'å', 'ä', 'ö']
+
 def hashHelper(number):
     # a-z becomes 1-26
     if(number > 96 and number < 123):
@@ -147,6 +149,17 @@ def printk(lineList):
 
 print("Write your search word: ")
 userInput = input().lower()
+validWord = False
+while(validWord == False):
+    validChar = True
+    for letter in userInput:
+        if(letter not in alphabet):
+            validChar = False
+    if(validChar == True):
+        validWord = True
+    else:
+        print("Your word is not valid, try again!")
+        userInput = input().lower()  
 
 lower = searchAlg(userInput)
 amount = findAmount(lower, userInput)
