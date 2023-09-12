@@ -7,10 +7,30 @@ def hashHelper(number):
     # å and ä becomes 27 resp. 28
     elif(number >= 228 and number <= 230):
         return number - 201
-    # ö becomes 29
+    # ö and ø becomes 29
     elif(number == 246 or number == 248):
         return 29
     # space and all other characters become 0
+    elif(number >= 224 and number <= 227):
+        return 1
+    elif(number == 223):
+        return 19
+    elif(number == 231):
+        return 3
+    elif(number >= 232 and number <= 235):
+        return 5
+    elif(number >= 236 and number <= 239):
+        return 9
+    elif(number == 240):
+        return 4
+    elif(number == 241):
+        return 14
+    elif(number >= 242 and number <= 245):
+        return 15
+    elif(number >= 249 and number <= 252):
+        return 21
+    elif(number == 253 or number == 255):
+        return 25
     else:
         return 0
 
@@ -38,10 +58,13 @@ def searchAlg():
     userInput = input().lower()
     posA = hash(userInput)
     posI = aIndex[posA]
-    i = 1
-    while (aIndex[posA + i] == -1):
-        i += 1
-    posINext = aIndex[posA + i]
+    if(posA == 26999):
+        posINext = aIndex[posA]
+    else:
+        i = 1
+        while (aIndex[posA + i] == -1):
+            i += 1
+        posINext = aIndex[posA + i]
 
     with open("../rawindex.txt", "r", encoding = "latin-1") as I:
         lower = int(posI)
@@ -95,8 +118,6 @@ def searchAlg():
                                 charCount += 1
                             allOccurrences.append(answerLine)
                         return allOccurrences
-                        #return(L.read(60))
-                #return lineList
 
 answer = searchAlg()
 if(answer == -1):
