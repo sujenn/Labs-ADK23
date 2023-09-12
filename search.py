@@ -77,9 +77,11 @@ def searchAlg():
                         answerLine = ""
                         ansChar = L.read(1)
                         charCount = 0
-                        while(charCount < 60): 
+                        while(charCount < 60 + len(lineList[0][0])): 
                             if(ansChar != "\n"):
                                 answerLine += ansChar
+                            else:
+                                answerLine += " "
                             ansChar = L.read(1)
                             charCount += 1
                         return answerLine
