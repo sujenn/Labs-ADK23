@@ -75,8 +75,12 @@ def searchAlg():
                     with open("../korpus", "r", encoding = "latin-1") as L:
                         allOccurrences = []
                         for i in range(len(lineList)):
-                            L.seek(int(lineList[i][1]) - 30)    #Få det att funka på första o sista test case också
                             answerLine = ""
+                            if (int(lineList[i][1]) < 30):
+                                for i in range(30 - int(lineList[i][1])):
+                                    answerLine += " "
+                            else:
+                                L.seek(int(lineList[i][1]) - 30)    #Få det att funka på första o sista test case också
                             ansChar = L.read(1)
                             charCount = 0
                             while(charCount < 60 + len(lineList[i][0])): 
