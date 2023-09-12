@@ -53,25 +53,16 @@ with open("A.txt", "r", encoding = "latin-1") as A:
             break
         aIndex.append(nextVar)
 
-def findAmount(lower, userInput):
-    count = 0
-    with open("../rawindex.txt", "r", encoding = "latin-1") as I:
-        I.seek(lower)
-        I.readline()
-        lineWord = I.readline().split()
-        while(lineWord[0] == userInput):
-            lineWord = I.readline().split()
-            count += 1
-    return count
-
-def searchAlg(userInput):
+def searchAlg():
+    print("Write your search word: ")
+    userInput = input().lower()
     posA = hash(userInput)
     posI = aIndex[posA]
     if(posA == 26999):
         posINext = aIndex[posA]
     else:
         i = 1
-        while (int(aIndex[posA + i]) == -1):
+        while (aIndex[posA + i] == -1):
             i += 1
         posINext = aIndex[posA + i]
 
@@ -90,66 +81,49 @@ def searchAlg(userInput):
                 higher = mid - 1
             else:
                 higher = mid
-    return lower
-
-
-def findOccurrences(lower, userInput):
-    with open("../rawindex.txt", "r", encoding = "latin-1") as I:
-        count = 0
+                
         I.seek(lower)       #fixa för första ordet
-        I.readline()
         lineList = []
-        while(count < 25):
+        while(True):
             lineWord = I.readline()
-            if(lineWord == "\n"):       
+            if(lineWord == "\n"):      
                 return lineList
             lineWord = lineWord.split()
             if(lineWord[0] == userInput):
                 lineList.append(lineWord)
-                count += 1
-            else: 
-                break
-        return lineList
-
-def printk(lineList):
-    if(len(lineList) == 0):
-        return -1
-    else:
-        with open("../korpus", "r", encoding = "latin-1") as L:
-            allOccurrences = []
-            for i in range(len(lineList)):
-                readLen = 30 + int(lineList[i][1])
-                answerLine = ""
-                if (int(lineList[i][1]) < 30):
-                    for _ in range(30 - int(lineList[i][1])):
-                        answerLine += " "
-                    L.seek(0)
+            if(lineWord[0] > userInput):
+                if(len(lineList) == 0):
+                    return -1
                 else:
-                    L.seek(int(lineList[i][1]) - 30)    #Få det att funka på första o sista test case också
-                    readLen = 60
-                ansChar = L.read(1)
-                charCount = 0
-                while(charCount < readLen + len(lineList[i][0])): 
-                    if(ansChar != "\n"):
-                        answerLine += ansChar
-                    else:
-                        answerLine += " "
-                    ansChar = L.read(1)
-                    charCount += 1
-                allOccurrences.append(answerLine)
-            return allOccurrences
+                    with open("../korpus", "r", encoding = "latin-1") as L:
+                        allOccurrences = []
+                        for i in range(len(lineList)):
+                            readLen = 30 + int(lineList[i][1])
+                            answerLine = ""
+                            if (int(lineList[i][1]) < 30):
+                                for i in range(30 - int(lineList[i][1])):
+                                    answerLine += " "
+                                L.seek(0)
+                            else:
+                                L.seek(int(lineList[i][1]) - 30)    #Få det att funka på första o sista test case också
+                                readLen = 60
+                            ansChar = L.read(1)
+                            charCount = 0
+                            while(charCount < readLen + len(lineList[i][0])): 
+                                if(ansChar != "\n"):
+                                    answerLine += ansChar
+                                else:
+                                    answerLine += " "
+                                ansChar = L.read(1)
+                                charCount += 1
+                            allOccurrences.append(answerLine)
+                        return allOccurrences
 
-print("Write your search word: ")
-userInput = input().lower()
-
-lower = searchAlg(userInput)
-amount = findAmount(lower, userInput)
-list25 = findOccurrences(lower, userInput)
-answer = printk(list25)
+answer = searchAlg()
 if(answer == -1):
     print("Not found")
 else:
-    print("Det finns " + str(amount) + " förekomster av ordet.") 
+    print("Det finns " + str(len(answer)) + " förekomster av ordet.") 
     if(len(answer) < 25):
         for i in range(len(answer)):
             print(answer[i])
@@ -159,21 +133,7 @@ else:
         print("Det finns fler förekomster att visa, vill du se dem? Yes/No")
         userI = input().lower()
         if(userI == "yes"):
-            with open("../rawindex.txt", "r", encoding = "latin-1") as I:
-                I.seek(lower)     
-                I.readline()
-                lineList = []
-                while(True):
-                    lineWord = I.readline()
-                    if(lineWord == "\n"):   
-                        break
-                    lineWord = lineWord.split()
-                    if(lineWord[0] == userInput):
-                        lineList.append(lineWord)
-                    else: 
-                        break
-                answer = printk(lineList)
-                for i in range(25, len(lineList)):
-                    print(answer[i])
+            for i in range(25, len(answer)):
+                print(answer[i])
 
 #Vid sökning av siffror blir det error. ValueError: negative seek position -1
