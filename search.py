@@ -63,7 +63,7 @@ def searchAlg():
         lineList = []
         while(True):
             lineWord = I.readline()
-            if(lineWord == "\n"):
+            if(lineWord == "\n"):           #Kolla sen
                 return lineList
             lineWord = lineWord.split()
             if(lineWord[0] == userInput):
@@ -73,18 +73,21 @@ def searchAlg():
                     return -1
                 else:
                     with open("../korpus", "r", encoding = "latin-1") as L:
-                        L.seek(int(lineList[0][1]) - 30)    #Få det att funka på första o sista test case också
-                        answerLine = ""
-                        ansChar = L.read(1)
-                        charCount = 0
-                        while(charCount < 60 + len(lineList[0][0])): 
-                            if(ansChar != "\n"):
-                                answerLine += ansChar
-                            else:
-                                answerLine += " "
+                        allOccurrences = []
+                        for i in range(len(lineList)):
+                            L.seek(int(lineList[i][1]) - 30)    #Få det att funka på första o sista test case också
+                            answerLine = ""
                             ansChar = L.read(1)
-                            charCount += 1
-                        return answerLine
+                            charCount = 0
+                            while(charCount < 60 + len(lineList[i][0])): 
+                                if(ansChar != "\n"):
+                                    answerLine += ansChar
+                                else:
+                                    answerLine += " "
+                                ansChar = L.read(1)
+                                charCount += 1
+                            allOccurrences.append(answerLine)
+                        return allOccurrences
                         #return(L.read(60))
                 #return lineList
 
@@ -92,6 +95,17 @@ answer = searchAlg()
 if(answer == -1):
     print("Not found")
 else:
-    print(answer)
+    print("Det finns " + str(len(answer)) + " förekomster av ordet.") 
+    if(len(answer) < 25):
+        for i in range(len(answer)):
+            print(answer[i])
+    else:
+        for i in range(25):
+            print(answer[i])
+        print("Det finns fler förekomster att visa, vill du se dem? Yes/No")
+        userI = input().lower()
+        if(userI == "yes"):
+            for i in range(25, len(answer)):
+                print(answer[i])
 
 #Vid sökning av siffror blir det error. ValueError: negative seek position -1
