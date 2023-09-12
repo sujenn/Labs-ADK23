@@ -57,6 +57,7 @@ def findAmount(lower, userInput):
     count = 0
     with open("../rawindex.txt", "r", encoding = "latin-1") as I:
         I.seek(lower)
+        I.readline()
         lineWord = I.readline().split()
         while(lineWord[0] == userInput):
             lineWord = I.readline().split()
