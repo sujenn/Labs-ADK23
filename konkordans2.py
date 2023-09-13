@@ -20,8 +20,6 @@ def findAmount(lower, userInput):
     with open("../rawindex.txt", "r", encoding = "latin-1") as I:
         I.seek(lower)
         lineWord = I.readline().split()
-        if(lineWord[0] < userInput):                # Handles the case where lower is on the line before the searced word
-            lineWord = I.readline().split()
         while(lineWord[0] == userInput):
             lineWord = I.readline().split()
             count += 1
@@ -57,6 +55,7 @@ def searchAlg(userInput):
             else:
                 higher = mid
         I.seek(lower)
+        #I.seek(posA)    #for linear search
         while True:
             x = I.tell()
             lineList = I.readline().split()
@@ -66,7 +65,6 @@ def searchAlg(userInput):
             if lineList[0] > userInput:
                 #not found
                 return x
-    return lower
 
 # Read 30 chars before and after the searched word for every occurrnace and prints it. When 25 words 
 # are printed and there are more words left, promts user and asks if they want to see the rest.
@@ -121,7 +119,6 @@ while(validWord == False):
 def printWords(lower, amount):
     with open("../rawindex.txt", "r", encoding = "latin-1") as I:
         I.seek(lower)  
-        isFirstRun = True
         count = 0
         while(True):
             if(count == 25 and amount > 25):
@@ -138,19 +135,15 @@ def printWords(lower, amount):
                 addChars([lineWord])
                 count += 1
             else:
-                if(isFirstRun == True):             # Handles the case where lower is on the line before the searched word
-                    isFirstRun = False
-                    continue
-                else:
-                    break
-            isFirstRun = False
+                break
     #return et
 
 # Run the functions
 lower = searchAlg(userInput)
 amount = findAmount(lower, userInput)
 
-# Check if the word was found, if there are more than 25 occurrances, they can be printed but this may take more than 1 sec
+# Check if the word was found, if there are more than 25 occurrances, 
+# they can be printed but this may take more than 1 sec
 if(amount == 0):
     print("Not found")
 else:
