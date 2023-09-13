@@ -1,5 +1,6 @@
 from hash import hash 
 import math
+import sys
 
 alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'å', 'ä', 'ö']
 
@@ -60,9 +61,6 @@ def findOccurrences(lower, userInput):
         lineList = []
         while(count < 25):
             lineWord = I.readline()
-            #ska kanske ta bort
-            if(lineWord == "\n"):       
-                return lineList
             if(lineWord == ""):       
                 return lineList
             lineWord = lineWord.split()
@@ -78,7 +76,7 @@ def findOccurrences(lower, userInput):
             isFirstRun = False
         return lineList
 
-def printk(lineList):
+def addChars(lineList):
     if(len(lineList) == 0):
         return -1
     else:
@@ -92,7 +90,7 @@ def printk(lineList):
                         answerLine += " "
                     L.seek(0)
                 else:
-                    L.seek(int(lineList[i][1]) - 30)    #Få det att funka på första o sista test case också
+                    L.seek(int(lineList[i][1]) - 30)    
                     readLen = 60
                 ansChar = L.read(1)
                 charCount = 0
@@ -106,8 +104,11 @@ def printk(lineList):
                 allOccurrences.append(answerLine)
             return allOccurrences
 
-print("Write your search word: ")
-userInput = input().lower()
+if(len(sys.argv) > 1):
+    userInput = sys.argv[1].lower()
+else: 
+    print("Your word is not valid, try again: ")
+    userInput = input().lower()
 validWord = False
 while(validWord == False):
     validChar = True
@@ -123,7 +124,7 @@ while(validWord == False):
 lower = searchAlg(userInput)
 amount = findAmount(lower, userInput)
 list25 = findOccurrences(lower, userInput)
-answer = printk(list25)
+answer = addChars(list25)
 if(answer == -1):
     print("Not found")
 else:
@@ -154,4 +155,3 @@ else:
                 for i in range(25, len(lineList)):
                     print(answer[i])
 
-#Vid sökning av siffror blir det error. ValueError: negative seek position -1
