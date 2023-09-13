@@ -60,8 +60,6 @@ def findAmount(lower, userInput):
     with open("../rawindex.txt", "r", encoding = "latin-1") as I:
         I.seek(lower)
         lineWord = I.readline().split()
-        if(len(lineWord) == 0):                 #Stämmer detta, tvungen att lägga in för ööä
-            lineWord = I.readline().split()
         if(lineWord[0] < userInput):
             lineWord = I.readline().split()
         while(lineWord[0] == userInput):
@@ -93,8 +91,6 @@ def searchAlg(userInput):
             lineList = I.readline().split()
             if(lineList[0] < userInput):
                 lower = mid + 1
-            elif(lineList[0] > userInput):
-                higher = mid - 1
             else:
                 higher = mid
     return lower
