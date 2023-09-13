@@ -56,34 +56,8 @@ def searchAlg(userInput):
                 higher = mid
     return lower
 
-'''
-# Finds the first 25 occurrences of the word in rawindex and returns them in a list
-def find25Occurrences(lower, userInput):              # lower is the first occurrance of the searched word
-    with open("../rawindex.txt", "r", encoding = "latin-1") as I:
-        count = 0
-        I.seek(lower)      
-        isFirstRun = True
-        lineList = []
-        while(count < 25):
-            lineWord = I.readline()
-            if(lineWord == ""):       
-                return lineList
-            lineWord = lineWord.split()
-            if(lineWord[0] == userInput):
-                lineList.append(lineWord)
-                count += 1
-            else:
-                if(isFirstRun == True):             # Handles the case where lower is on the line before the searched word
-                    isFirstRun = False
-                    continue
-                else:
-                    break
-            isFirstRun = False
-        return lineList
-'''
-
-# Read 30 chars before and after the searched word for every occurrnace and prints it. When 25 words are printed
-# and there are more words left, promts user and asks if they want to see the rest. 
+# Read 30 chars before and after the searched word for every occurrnace and prints it. When 25 words 
+# are printed and there are more words left, promts user and asks if they want to see the rest.
 def addChars(lineList):
     with open("../korpus", "r", encoding = "latin-1") as L:
         for i in range(len(lineList)):
@@ -126,28 +100,23 @@ while(validWord == False):
         print("Your word is not valid, try again!")
         userInput = input().lower()  
 
+# Linear search from first occurrence of the searched word in constant memory complexity, 
+# calls addChars to print each word (with chars before and after) and keep track of 25 
 def printWords(lower, amount):
     with open("../rawindex.txt", "r", encoding = "latin-1") as I:
         I.seek(lower)  
-        #I.readline()   
         isFirstRun = True
         count = 0
-
         while(True):
             if(count == 25 and amount > 25):
                 print("Det finns fler förekomster att visa, vill du se dem? Yes/No")
                 userI = input().lower()
-                if(userI == "no"):
-                    break
-                elif(userI == "yes"):
-                    hej = 0
-                else:
+                if(userI != "yes"):
                     break
             lineWord = I.readline()
             if(lineWord == ""):   
                 break
             lineWord = lineWord.split()
-            #print(lineWord)
             if(lineWord[0] == userInput):
                 addChars([lineWord])
                 count += 1
@@ -162,7 +131,6 @@ def printWords(lower, amount):
 # Run the functions
 lower = searchAlg(userInput)
 amount = findAmount(lower, userInput)
-#list25 = find25Occurrences(lower, userInput)
 
 # Check if the word was found, if there are more than 25 occurrances, they can be printed but this may take more than 1 sec
 if(amount == 0):
