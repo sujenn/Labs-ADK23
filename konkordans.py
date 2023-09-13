@@ -151,7 +151,7 @@ else:
                         lineList.append(lineWord)
                     else: 
                         break
-                answer = printk(lineList)
+                answer = addChars(lineList)
                 for i in range(25, len(lineList)):
                     print(answer[i])
 
