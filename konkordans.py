@@ -1,7 +1,9 @@
 from hash import hash 
 import math
 import sys
+import time
 
+#st = time.time()
 # Read from A.txt and save to aIndex
 aIndex = []
 with open("A.txt", "r", encoding = "latin-1") as A:
@@ -109,6 +111,7 @@ def printWords(lower, amount):
         count = 0
         while(True):
             if(count == 25 and amount > 25):
+                #et = time.time()
                 print("Det finns fler förekomster att visa, vill du se dem? Yes/No")
                 userI = input().lower()
                 if(userI != "yes"):
@@ -127,6 +130,7 @@ def printWords(lower, amount):
                 else:
                     break
             isFirstRun = False
+    #return et
 
 # Run the functions
 lower = searchAlg(userInput)
@@ -137,7 +141,11 @@ if(amount == 0):
     print("Not found")
 else:
     print("Det finns " + str(amount) + " förekomster av ordet.") 
+    #et = printWords(lower, amount)
     printWords(lower, amount)
+
+'''elapsed_time = et - st
+print('Execution time:', elapsed_time, 'seconds')'''
 
     
 
