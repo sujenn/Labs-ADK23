@@ -56,6 +56,7 @@ def searchAlg(userInput):
                 higher = mid
     return lower
 
+'''
 # Finds the first 25 occurrences of the word in rawindex and returns them in a list
 def find25Occurrences(lower, userInput):              # lower is the first occurrance of the searched word
     with open("../rawindex.txt", "r", encoding = "latin-1") as I:
@@ -79,35 +80,32 @@ def find25Occurrences(lower, userInput):              # lower is the first occur
                     break
             isFirstRun = False
         return lineList
+'''
 
-# Read 30 chars before and after the searched word for every occurrnace returns that as a list
+# Read 30 chars before and after the searched word for every occurrnace and prints it. When 25 words are printed
+# and there are more words left, promts user and asks if they want to see the rest. 
 def addChars(lineList):
-    if(len(lineList) == 0):
-        return -1
-    else:
-        with open("../korpus", "r", encoding = "latin-1") as L:
-            allOccurrences = []
-            for i in range(len(lineList)):
-                readLen = 30 + int(lineList[i][1])
-                answerLine = ""
-                if (int(lineList[i][1]) < 30):
-                    for _ in range(30 - int(lineList[i][1])):
-                        answerLine += " "
-                    L.seek(0)
+    with open("../korpus", "r", encoding = "latin-1") as L:
+        for i in range(len(lineList)):
+            readLen = 30 + int(lineList[i][1])
+            answerLine = ""
+            if (int(lineList[i][1]) < 30):
+                for _ in range(30 - int(lineList[i][1])):
+                    answerLine += " "
+                L.seek(0)
+            else:
+                L.seek(int(lineList[i][1]) - 30)    
+                readLen = 60
+            ansChar = L.read(1)
+            charCount = 0
+            while(charCount < readLen + len(lineList[i][0])): 
+                if(ansChar != "\n"):
+                    answerLine += ansChar
                 else:
-                    L.seek(int(lineList[i][1]) - 30)    
-                    readLen = 60
+                    answerLine += " "
                 ansChar = L.read(1)
-                charCount = 0
-                while(charCount < readLen + len(lineList[i][0])): 
-                    if(ansChar != "\n"):
-                        answerLine += ansChar
-                    else:
-                        answerLine += " "
-                    ansChar = L.read(1)
-                    charCount += 1
-                allOccurrences.append(answerLine)
-            return allOccurrences
+                charCount += 1
+            print(answerLine)
 
 # read from args and keyboard input. Checks if any extra args exists and then that it is valid (Swedish Alphabet)
 alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'å', 'ä', 'ö']
@@ -128,45 +126,50 @@ while(validWord == False):
         print("Your word is not valid, try again!")
         userInput = input().lower()  
 
+def printWords(lower, amount):
+    with open("../rawindex.txt", "r", encoding = "latin-1") as I:
+        I.seek(lower)  
+        #I.readline()   
+        isFirstRun = True
+        count = 0
+
+        while(True):
+            if(count == 25 and amount > 25):
+                print("Det finns fler förekomster att visa, vill du se dem? Yes/No")
+                userI = input().lower()
+                if(userI == "no"):
+                    break
+                elif(userI == "yes"):
+                    hej = 0
+                else:
+                    break
+            lineWord = I.readline()
+            if(lineWord == ""):   
+                break
+            lineWord = lineWord.split()
+            #print(lineWord)
+            if(lineWord[0] == userInput):
+                addChars([lineWord])
+                count += 1
+            else:
+                if(isFirstRun == True):             # Handles the case where lower is on the line before the searched word
+                    isFirstRun = False
+                    continue
+                else:
+                    break
+            isFirstRun = False
+
 # Run the functions
 lower = searchAlg(userInput)
 amount = findAmount(lower, userInput)
-list25 = find25Occurrences(lower, userInput)
-answer = addChars(list25)
+#list25 = find25Occurrences(lower, userInput)
 
 # Check if the word was found, if there are more than 25 occurrances, they can be printed but this may take more than 1 sec
-if(answer == -1):
+if(amount == 0):
     print("Not found")
 else:
     print("Det finns " + str(amount) + " förekomster av ordet.") 
-    if(len(answer) < 25):
-        for i in range(len(answer)):
-            print(answer[i])
-    else:
-        for i in range(25):
-            print(answer[i])
-        print("Det finns fler förekomster att visa, vill du se dem? Yes/No")
-        userI = input().lower()
-        if(userI == "yes"):
-            with open("../rawindex.txt", "r", encoding = "latin-1") as I:
-                I.seek(lower)     
-                lineList = []
-                isFirstRun = True
-                while(True):
-                    lineWord = I.readline()
-                    if(lineWord == "\n"):   
-                        break
-                    lineWord = lineWord.split()
-                    if(lineWord[0] == userInput):
-                        lineList.append(lineWord)
-                    else:
-                        if(isFirstRun == True):             # Handles the case where lower is on the line before the searched word
-                            isFirstRun = False
-                            continue
-                        else:
-                            break
-                    isFirstRun = False
-                answer = addChars(lineList)
-                for i in range(25, len(lineList)):
-                    print(answer[i])
+    printWords(lower, amount)
+
+    
 
