@@ -57,23 +57,22 @@ def searchAlg(userInput):
         I.seek(lower)
         #I.seek(posA)    #for linear search
         while True:
-            x = I.tell()
+            lower = I.tell()                        # x = First occrrence of the searched word
             lineList = I.readline().split()
             if lineList[0] == userInput:
                 #found
-                return x
+                return lower
             if lineList[0] > userInput:
                 #not found
-                return x
+                return lower
 
-# Read 30 chars before and after the searched word for every occurrnace and prints it. When 25 words 
-# are printed and there are more words left, promts user and asks if they want to see the rest.
+# Read 30 chars before and after the searched word for every occurrnace and prints it. 
 def addChars(lineList):
     with open("../korpus", "r", encoding = "latin-1") as L:
         for i in range(len(lineList)):
             readLen = 30 + int(lineList[i][1])
             answerLine = ""
-            if (int(lineList[i][1]) < 30):
+            if (int(lineList[i][1]) < 30):                      # if the word is on index less than 30, padding
                 for _ in range(30 - int(lineList[i][1])):
                     answerLine += " "
                 L.seek(0)
@@ -136,7 +135,7 @@ def printWords(lower, amount):
                 count += 1
             else:
                 break
-    #return et
+            #return et
 
 # Run the functions
 lower = searchAlg(userInput)
