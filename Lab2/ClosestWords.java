@@ -10,7 +10,8 @@ public class ClosestWords {
 
   int closestDistance = -1;
 
-  int partDist(String w1, String w2, int w1len, int w2len) {
+  static int partDist(String w1, String w2, int w1len, int w2len) {
+    System.out.println(w1len + " " + w2len);
     if (w1len == 0)
       return w2len;
     if (w2len == 0)
@@ -50,5 +51,9 @@ public class ClosestWords {
 
   List<String> getClosestWords() {
     return closestWords;
+  }
+
+  public static void main(String[] args) {
+    System.out.print(partDist("la", "b", 2, 1));
   }
 }
