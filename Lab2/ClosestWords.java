@@ -1,3 +1,4 @@
+package Lab2;
 /* Labb 2 i DD2350 Algoritmer, datastrukturer och komplexitet    */
 /* Se labbinstruktionerna i kursrummet i Canvas                  */
 /* Ursprunglig författare: Viggo Kann KTH viggo@nada.kth.se      */
