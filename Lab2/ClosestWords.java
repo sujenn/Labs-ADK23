@@ -33,34 +33,37 @@ public class ClosestWords {
     if (w2len == 0) {
         return w1len;
     }
+    int[][] editMatrix = new int[w2len + 1][w1len + 1];
 
-    int[] prevRow = new int[w2len + 1];
-    int[] currRow = new int[w2len + 1];
-
-    for (int j = 0; j < w2len + 1; j++) {
-        prevRow[j] = j;
+    for (int row = 0; row < w2len + 1; row++) {
+        editMatrix[row][0] = row;
+    }
+    for (int col = 1; col < w1len + 1; col++) {
+    editMatrix[0][col] = col;
     }
 
-    for (int i = 1; i < w1len + 1; i++) {
-        currRow[0] = i;
-        for (int j = 1; j < w2len + 1; j++) {
-            if (w1.charAt(i - 1) != w2.charAt(j - 1)) {
-                int remove = prevRow[j] + 1;
-                int swap = currRow[j - 1] + 1;
-                int add = prevRow[j - 1] + 1;
-                currRow[j] = Math.min(remove, Math.min(swap, add));
-            }
-            else {
-                currRow[j] = prevRow[j - 1];
-            }
+    for (int col = 1; col < w1len + 1; col++) {
+      for (int row = 1; row < w2len + 1; row++) {
+        if (w1.charAt(col - 1) != w2.charAt(row -1)){
+          int remove = editMatrix[row][col - 1] + 1;
+          int swap = editMatrix[row - 1][col] + 1;
+          int add = editMatrix[row - 1][col - 1] + 1;
+          if (row + 1 < w2len + 1){
+            editMatrix[row][col] = Math.min(remove, Math.min(swap, add));
+          }
+        } else{
+          editMatrix[col][row] =  editMatrix[col - 1][row - 1];
         }
-        // Deep copy of currRow to prevRow
-        for (int k = 0; k < w2len + 1; k++) {
-            prevRow[k] = currRow[k];
-        }
+      }     
     }
- 
-        return prevRow[w2len];
+    for(int col = 0; col < w2len +1; col++){
+      for(int row = 0; row < w1len + 1; row++){
+        System.out.print(editMatrix[row][col] + " ");
+      }
+      System.out.println();
+    }
+
+    return editMatrix[w2len + 1][w1len + 1]; //kanske +1??
   }
 
   int distance(String w1, String w2) {
