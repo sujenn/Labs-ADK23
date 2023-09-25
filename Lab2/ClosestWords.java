@@ -10,7 +10,7 @@ public class ClosestWords {
 
   int closestDistance = -1;
 
-  int partDist2(String w1, String w2, int w1len, int w2len) {
+  /*int partDist2(String w1, String w2, int w1len, int w2len) {
     if (w1len == 0)
       return w2len;
     if (w2len == 0)
@@ -24,46 +24,55 @@ public class ClosestWords {
     if (deleteLetter < res)
       res = deleteLetter;
     return res;
-  }
+  }*/
+  int[][] editMatrix = new int[200][200];
+  String oldWord = "";
 
-  int partDist(String w1, String w2, int w1len, int w2len) {
+  int partDist(String w1, String w2, int w1len, int w2len) {  //w1 är det ord som är felstavat och w2 är ordet som finns i ordlistan
     if (w1len == 0) {
         return w2len;
     }
     if (w2len == 0) {
         return w1len;
     }
-    int[][] editMatrix = new int[w2len + 1][w1len + 1];
+
+    int changeFromRow = 0;
+    int compare = 0;
+    while (compare < Math.min(w2len, oldWord.length())) {
+      if (w2.charAt(compare) == oldWord.charAt(compare)) {
+        changeFromRow++;
+      }
+      compare++;
+    }
 
     for (int row = 0; row < w2len + 1; row++) {
-        editMatrix[row][0] = row;
+      editMatrix[row][0] = row;
     }
     for (int col = 1; col < w1len + 1; col++) {
-    editMatrix[0][col] = col;
+      editMatrix[0][col] = col;
     }
 
-    for (int col = 1; col < w1len + 1; col++) {
-      for (int row = 1; row < w2len + 1; row++) {
-        if (w1.charAt(col - 1) != w2.charAt(row -1)){
-          int remove = editMatrix[row][col - 1] + 1;
-          int swap = editMatrix[row - 1][col] + 1;
+    for (int row = changeFromRow + 1; row < w2len + 1; row++) { //rätt?
+      for (int col = 1; col < w1len + 1; col++) {
+        if (w2.charAt(row - 1) != w1.charAt(col - 1)){
+          int remove = editMatrix[row - 1][col] + 1;
+          int swap = editMatrix[row][col - 1] + 1;
           int add = editMatrix[row - 1][col - 1] + 1;
-          if (row + 1 < w2len + 1){
-            editMatrix[row][col] = Math.min(remove, Math.min(swap, add));
-          }
+          editMatrix[row][col] = Math.min(remove, Math.min(swap, add));
         } else{
-          editMatrix[col][row] =  editMatrix[col - 1][row - 1];
+          editMatrix[row][col] =  editMatrix[row - 1][col - 1];
         }
       }     
     }
-    for(int col = 0; col < w2len +1; col++){
-      for(int row = 0; row < w1len + 1; row++){
+    oldWord = w2;
+    /*for(int row = 0; row < w2len + 1; row++){
+      for(int col = 0; col < w1len +1; col++){
         System.out.print(editMatrix[row][col] + " ");
       }
       System.out.println();
-    }
+    }*/
 
-    return editMatrix[w2len + 1][w1len + 1]; //kanske +1??
+    return editMatrix[w2len][w1len];
   }
 
   int distance(String w1, String w2) {
