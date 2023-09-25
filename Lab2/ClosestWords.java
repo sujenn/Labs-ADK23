@@ -40,8 +40,8 @@ public class ClosestWords {
       for (int col = 1; col < w1len + 1; col++) {
         if (w2.charAt(row - 1) != w1.charAt(col - 1)){
           int remove = editMatrix[row - 1][col] + 1;
-          int swap = editMatrix[row][col - 1] + 1;
-          int add = editMatrix[row - 1][col - 1] + 1;
+          int add = editMatrix[row][col - 1] + 1;
+          int swap = editMatrix[row - 1][col - 1] + 1;
           editMatrix[row][col] = Math.min(remove, Math.min(swap, add));
         } else{
           editMatrix[row][col] =  editMatrix[row - 1][col - 1];
