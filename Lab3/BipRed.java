@@ -11,40 +11,50 @@ package Lab3;
 
 public class BipRed {
     Kattio io;
+	int x;
+	int y;
+	int e;
+	int[][] edges;
+	int[][] flowSolution;
+	int totflow;
     
-    int[][] readBipartiteGraph() {
+    void readBipartiteGraph() {
 		// Läs antal hörn och kanter
-		
-		int x = io.getInt();
-		int y = io.getInt();
-		int e = io.getInt();
+		x = io.getInt();
+		y = io.getInt();
+		e = io.getInt();
 		
 		// Läs in kanterna
-		int[][] all = new int[e + 2][2];
-		all[0][0] = x;
-		all[0][1] = y;
-		all[1][0] = e;
+		edges = new int[e][2];
 		for (int i = 0; i < e; ++i) {
-			int a = io.getInt();
-			int b = io.getInt();
-			all[i + 2][0] = a;
-			all[i + 2][1] = b;
+			edges[i][0] = io.getInt();
+			edges[i][1] = io.getInt();
 		}
-		return all;
     }
     
     
-    void writeFlowGraph(int[][] elements) {
-		int v = elements[0][0] + elements[0][1], e = elements[1][0], s = v + 1, t = v + 2;
+    void writeFlowGraph() {
+		int v = x + y, e2 = e + x + y, s = v + 1, t = v + 2;
 		
 		// Skriv ut antal hörn och kanter samt källa och sänka
-		io.println(v);
+		io.println(v + 2);
 		io.println(s + " " + t);
-		io.println(e);
+		io.println(e2);
+		int c = 1;
+		for (int i = 0; i < x; ++i) {
+			int a = i + 1;
+			// Kant från s till a med kapacitet c
+			io.println(s + " " + a + " " + c);
+		}
 		for (int i = 0; i < e; ++i) {
-			int a = elements[i + 2][0], b = elements[i + 2][1], c = 1;
+			int a = edges[i][0], b = edges[i][1];
 			// Kant från a till b med kapacitet c
 			io.println(a + " " + b + " " + c);
+		}
+		for (int i = 0; i < y; ++i) {
+			int b = x + i + 1;
+			// Kant från b till t med kapacitet c
+			io.println(b + " " + t + " " + c);
 		}
 		// Var noggrann med att flusha utdata när flödesgrafen skrivits ut!
 		io.flush();
@@ -54,7 +64,7 @@ public class BipRed {
     }
     
     
-    int[][] readMaxFlowSolution() {
+    void readMaxFlowSolution() {
 		// Läs in antal hörn, kanter, källa, sänka, och totalt flöde
 		// (Antal hörn, källa och sänka borde vara samma som vi i grafen vi
 		// skickade iväg)
@@ -62,41 +72,48 @@ public class BipRed {
 		int v = io.getInt();
 		int s = io.getInt();
 		int t = io.getInt();
-		int totflow = io.getInt();
+		totflow = io.getInt();
 		int e = io.getInt();
 
-		int[][] flowSolution = new int[e + 3][3];
-		flowSolution[0][0] = v;
-		flowSolution[1][0] = s;
-		flowSolution[1][1] = t;
-		flowSolution[1][2] = totflow;
-		flowSolution[2][0] = e;
+		flowSolution = new int[totflow][3];	//Rätt storlek på denna?
 
+		/*for (int i = 0; i < e; ++i) {
+			// Flöde f från a till b
+			int a = io.getInt();
+			int b = io.getInt();
+			int f = io.getInt();
+			flowSolution[i][0] = a;
+			flowSolution[i][1] = b;
+			flowSolution[i][2] = f;
+		}*/
 
-
+		int j = 0;
 		for (int i = 0; i < e; ++i) {
 			// Flöde f från a till b
 			int a = io.getInt();
 			int b = io.getInt();
 			int f = io.getInt();
-			flowSolution[i + 3][0] = a;
-			flowSolution[i + 3][1] = b;
-			flowSolution[i + 3][2] = f;
+			if (!(a == s || b == t)) {
+				flowSolution[j][0] = a;
+				flowSolution[j][1] = b;
+				flowSolution[j][2] = f;
+				j++;
+			}
 		}
-		return flowSolution;
+		totflow = j;	//antalet kanter som har flow mellan sig mellan x och y hörnen
     }
     
     
-    void writeBipMatchSolution(int[][] flowSolution) {
-		int x = flowSolution[][], y = io.getInt(), maxMatch = flowSolution[1][2];
+    void writeBipMatchSolution() {
+		int maxMatch = totflow;
 		
 		// Skriv ut antal hörn och storleken på matchningen
 		io.println(x + " " + y);
 		io.println(maxMatch);
 		
-		for (int i = 0; i < maxMatch; ++i) {
-			int a = io.getInt(), b = io.getInt();
-			// Kant mellan a och b ingår i vår matchningslösning
+		for (int i = 0; i < totflow; ++i) {
+			int a = flowSolution[i][0], b = flowSolution[i][1];
+			// Kant mellan a och b ingår i vår matchningslösning (har flöde 1)
 			io.println(a + " " + b);
 		}
 	
@@ -105,13 +122,13 @@ public class BipRed {
     BipRed() {
 		io = new Kattio(System.in, System.out);
 		
-		int[][] elements = readBipartiteGraph();
+		readBipartiteGraph();
 		
-		writeFlowGraph(elements);
+		writeFlowGraph();
 		
-		int[][] flowSolution = readMaxFlowSolution();
+		readMaxFlowSolution();
 		
-		writeBipMatchSolution(flowSolution);
+		writeBipMatchSolution();
 
 		// debugutskrift
 		System.err.println("Bipred avslutar\n");
