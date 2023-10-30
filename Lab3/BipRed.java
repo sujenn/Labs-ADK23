@@ -75,18 +75,8 @@ public class BipRed {
 		totflow = io.getInt();
 		int e = io.getInt();
 
-		flowSolution = new int[totflow][3];	//Rätt storlek på denna?
-
-		/*for (int i = 0; i < e; ++i) {
-			// Flöde f från a till b
-			int a = io.getInt();
-			int b = io.getInt();
-			int f = io.getInt();
-			flowSolution[i][0] = a;
-			flowSolution[i][1] = b;
-			flowSolution[i][2] = f;
-		}*/
-
+		flowSolution = new int[totflow][3];	
+		
 		int j = 0;
 		for (int i = 0; i < e; ++i) {
 			// Flöde f från a till b
