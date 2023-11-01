@@ -28,9 +28,7 @@ public class BipRed2 {
     int[][] f;  // flöde
     int[][] cf; // restkapacitet
     int[] path; // augmenting path
-    //int sf;
-    //int tf;
-    //int vf;
+
 	ArrayList<LinkedList<Integer>> neighbours;
     
     void readBipartiteGraph() {
@@ -47,12 +45,11 @@ public class BipRed2 {
 		}
     }
     
-    
     void writeFlowGraph() {
 		v = x + y + 2; 
 		e = e + x + y;
-		s = v + 1;
-		t = v + 2;
+		s = v - 1;
+		t = v;
 		
 		// Debugutskrift
 		System.err.println("Skickade iväg flödesgrafen");
@@ -116,7 +113,7 @@ public class BipRed2 {
             neighbours.get(a).add(s);
 		}
 		for (int i = 0; i < e; ++i) {
-			int a = edges[i][0] - 1, b = edges[i][1] - 1;
+			int a = edges[i][0] , b = edges[i][1] ;
 			// Kant från a till b med kapacitet c
 			edges[i][0] = a;       
             edges[i][1] = b;      
@@ -170,6 +167,17 @@ public class BipRed2 {
             }
             maxFlow += r;
         }
+		totflow = maxFlow;
+		s++;
+		t++;
+
+		for (int i = 0; i < e; i++) {
+            if (f[edges[i][0]][edges[i][1]] > 0) {
+                edges[i][0]++;
+				edges[i][1]++;
+            }
+        }
+
     }
     
     
@@ -184,8 +192,8 @@ public class BipRed2 {
 		for (int i = 0; i < e; ++i) {
 			// Flöde f från a till b
 			if (f[edges[i][0]][edges[i][1]] > 0) {
-				int a = edges[i][0]+1;
-				int b = edges[i][1]+1;
+				int a = edges[i][0];
+				int b = edges[i][1];
 				int flowf = f[edges[i][0]][edges[i][1]];
 				if (!(a == s || b == t)) {
 					flowSolution[j][0] = a;
@@ -195,7 +203,6 @@ public class BipRed2 {
 				}
 			}
 		}
-		totflow = j;
 		totflow = j;	//antalet kanter som har flow mellan sig mellan x och y hörnen
     }
     
