@@ -18,6 +18,7 @@ public class BipRed2 {
 	int y;
 	int e;
 	int[][] edges;
+	int[][] flowEdges;
 	int[][] flowSolution;
 	int totflow;
 	int v;
@@ -90,7 +91,7 @@ public class BipRed2 {
         f = new int[v][v];
         c = new int[v][v]; 
         cf = new int[v][v]; 
-        edges = new int[e][2];
+        flowEdges = new int[e][2];
         neighbours = new ArrayList<LinkedList<Integer>>();
 
         for (int i = 0; i < v; i++) {
@@ -100,8 +101,8 @@ public class BipRed2 {
 		for (int i = 0; i < x; ++i) {
 			int a = i;
 			// Kant från s till a med kapacitet c
-			edges[i][0] = s;       
-            edges[i][1] = a;      
+			flowEdges[i][0] = s;       
+            flowEdges[i][1] = a;      
             c[s][a] = 1; 
 
             f[s][a] = 0;        	// f[u,v] = 0
@@ -112,11 +113,11 @@ public class BipRed2 {
             neighbours.get(s).add(a);
             neighbours.get(a).add(s);
 		}
-		for (int i = 0; i < e; ++i) {
-			int a = edges[i][0] , b = edges[i][1] ;
+		for (int i = x; i < e - y; ++i) {
+			int a = edges[i - x][0] , b = edges[i - x][1] ;
 			// Kant från a till b med kapacitet c
-			edges[i][0] = a;       
-            edges[i][1] = b;      
+			flowEdges[i][0] = a;       
+            flowEdges[i][1] = b;      
             c[a][b] = 1; 
 
             f[a][b] = 0;        // f[u,v] = 0
@@ -127,11 +128,11 @@ public class BipRed2 {
             neighbours.get(a).add(b);
             neighbours.get(b).add(a);
 		}
-		for (int i = 0; i < y; ++i) {
-			int b = x + i;
+		for (int i = e - y; i < e; ++i) {
+			int b = x + i - (e - y);
 			// Kant från b till t med kapacitet c
-			edges[i][0] = b;       
-            edges[i][1] = t;      
+			flowEdges[i][0] = b;       
+            flowEdges[i][1] = t;      
             c[b][t] = 1; 
 
             f[b][t] = 0;        	// f[u,v] = 0
@@ -168,15 +169,15 @@ public class BipRed2 {
             maxFlow += r;
         }
 		totflow = maxFlow;
-		s++;
-		t++;
+		/*s++;
+		t++;*/
 
-		for (int i = 0; i < e; i++) {
-            if (f[edges[i][0]][edges[i][1]] > 0) {
-                edges[i][0]++;
-				edges[i][1]++;
+		/*for (int i = 0; i < e; i++) {
+            if (f[flowEdges[i][0]][flowEdges[i][1]] > 0) {
+                flowEdges[i][0]++;
+				flowEdges[i][1]++;
             }
-        }
+        }*/
 
     }
     
@@ -191,10 +192,10 @@ public class BipRed2 {
 		int j = 0;
 		for (int i = 0; i < e; ++i) {
 			// Flöde f från a till b
-			if (f[edges[i][0]][edges[i][1]] > 0) {
-				int a = edges[i][0];
-				int b = edges[i][1];
-				int flowf = f[edges[i][0]][edges[i][1]];
+			if (f[flowEdges[i][0]][flowEdges[i][1]] > 0) {
+				int a = flowEdges[i][0];
+				int b = flowEdges[i][1];
+				int flowf = f[flowEdges[i][0]][flowEdges[i][1]];
 				if (!(a == s || b == t)) {
 					flowSolution[j][0] = a;
 					flowSolution[j][1] = b;
