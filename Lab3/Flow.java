@@ -13,13 +13,10 @@ public class Flow {
     int t;
     int v;
     int[][] edges;
-    LinkedList<Integer>[] neighbours;
-    //ArrayList<LinkedList<Integer>[]> neighbours;
+    ArrayList<LinkedList<Integer>> neighbours;
 
-    /* Funktionen bfs är tagen och anpassad från GeeksForGeeks */
     boolean bfs() {
         boolean visited[] = new boolean[v];
-        //Arrays.fill(visited, false);    //all nodes start as nonvisited (false)
 
         LinkedList<Integer> queue = new LinkedList<Integer>();
         queue.add(s);
@@ -29,30 +26,19 @@ public class Flow {
         while (queue.size() != 0) { 
             int x = queue.poll();
 
-            for (int y = 0; y < v; y++) { // Går igenom alla andra noder och inte bara grannar (edges)
-                if (visited[y] == false && cf[x][y] > 0) {
-                    if (y == t) {
-                        path[y] = x;
+            LinkedList<Integer> node = neighbours.get(x);
+            for (int i = 0; i < node.size(); i++) {
+                if (visited[node.get(i)] == false && cf[x][node.get(i)] > 0) {
+                    if (node.get(i) == t) {
+                        path[node.get(i)] = x;
                         return true;
                     }
-                    queue.add(y);
-                    path[y] = x;
-                    visited[y] = true;
-                }
-            }
-
-            /*for (int i = 0; i < neighbours[x].size(); i++) {
-                if (visited[neighbours[x].get(i)] == false && cf[x][neighbours[x].get(i)] > 0) {
-                    if (neighbours[x].get(i) == t) {
-                        path[neighbours[x].get(i)] = x;
-                        return true;
-                    }
-                    queue.add(neighbours[x].get(i));
-                    path[neighbours[x].get(i)] = x;
-                    visited[neighbours[x].get(i)] = true;
+                    queue.add(node.get(i));
+                    path[node.get(i)] = x;
+                    visited[node.get(i)] = true;
                 }
             
-            }*/
+            }
         }
         return false;
     }
@@ -67,15 +53,11 @@ public class Flow {
         c = new int[v][v]; 
         cf = new int[v][v]; 
         edges = new int[e][2];
-        //neighbours = new ArrayList<>(v);
+        neighbours = new ArrayList<LinkedList<Integer>>();
 
-        for (int i = 0; i < neighbours.length; i++) {
-            neighbours[i] = new LinkedList<Integer>();
-        }
-
-        /*for (int i = 0; i < v; i++) {
+        for (int i = 0; i < v; i++) {
             neighbours.add(new LinkedList<Integer>());
-        }*/
+        }
 
         for (int i = 0; i < e; i++) {
             int a = io.getInt()-1;  // u in pseudocode 
@@ -90,8 +72,8 @@ public class Flow {
             cf[a][b] = cap;     // cf[u,v] = c[u,v]
             cf[b][a] = c[b][a]; // cf[v,u] = c[v,u]
 
-            neighbours[a].add(b);
-            neighbours[b].add(a);
+            neighbours.get(a).add(b);
+            neighbours.get(b).add(a);
         }
 
         int maxFlow = 0;
