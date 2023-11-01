@@ -1,4 +1,3 @@
-package Lab3;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -93,7 +92,7 @@ public class BipRed2 {
         cf = new int[v][v]; 
         flowEdges = new int[e][2];
         neighbours = new ArrayList<LinkedList<Integer>>();
-
+        
         for (int i = 0; i < v; i++) {
             neighbours.add(new LinkedList<Integer>());
         }
@@ -114,7 +113,7 @@ public class BipRed2 {
             neighbours.get(a).add(s);
 		}
 		for (int i = x; i < e - y; ++i) {
-			int a = edges[i - x][0] , b = edges[i - x][1] ;
+			int a = edges[i - x][0] - 1, b = edges[i - x][1] - 1; //första felet pga index lmao
 			// Kant från a till b med kapacitet c
 			flowEdges[i][0] = a;       
             flowEdges[i][1] = b;      
@@ -143,7 +142,27 @@ public class BipRed2 {
             neighbours.get(b).add(t);
             neighbours.get(t).add(b);
 		}
-
+        
+        /* 
+        // Print the elements in the ArrayList of LinkedLists
+        System.out.println(); // Add a newline after each LinkedList
+        for (LinkedList<Integer> linkedList : neighbours) {
+            for (Integer value : linkedList) {
+                System.out.print(value + " ");
+            }
+            System.out.println();
+        }
+        
+        System.out.println(); 
+        for (int i = 0; i < v; i++) {
+            for (int j = 0; j < v; j++) {
+                System.out.print(cf[i][j] + " ");
+            }
+            System.out.println(); // Move to the next row
+        }
+        System.out.println();
+        */
+        
         int maxFlow = 0;
 
         path = new int[v]; 
@@ -216,7 +235,7 @@ public class BipRed2 {
 		io.println(maxMatch);
 		
 		for (int i = 0; i < totflow; ++i) {
-			int a = flowSolution[i][0], b = flowSolution[i][1];
+			int a = flowSolution[i][0] + 1, b = flowSolution[i][1] + 1;  //andra felet pga index
 			// Kant mellan a och b ingår i vår matchningslösning (har flöde 1)
 			io.println(a + " " + b);
 		}

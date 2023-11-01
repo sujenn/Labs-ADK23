@@ -1,5 +1,3 @@
-package Lab3;
-
 /** Simple yet moderately fast I/O routines.
  *
  * Example usage:

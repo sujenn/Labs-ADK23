@@ -1,4 +1,3 @@
-package Lab3;
 import java.util.LinkedList;
 import java.util.Arrays; 
 import java.util.ArrayList; 

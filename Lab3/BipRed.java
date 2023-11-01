@@ -1,4 +1,3 @@
-package Lab3;
 /**
  * Exempel på in- och utdatahantering för maxflödeslabben i kursen
  * ADK.
