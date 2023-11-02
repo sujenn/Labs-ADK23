@@ -11,6 +11,9 @@ import java.util.HashMap;
  * Se http://kattis.csc.kth.se/doc/javaio
  *
  * @author: Per Austrin
+ * 
+ * Edited by Rasmuss Brodin, Jennifer Su
+ * 
  */
 
 public class BipRed3 {
@@ -25,17 +28,13 @@ public class BipRed3 {
 	int v;
 	int s;
 	int t;
-
-	//int[][] c;  // kapacitet
-    //int[][] f;  // flöde
-    //int[][] cf; // restkapacitet
     int[] path; // augmenting path
 
     HashMap<Integer, Integer> c;
     HashMap<Integer, Integer> f;
     HashMap<Integer, Integer> cf;
 
-	ArrayList<LinkedList<Integer>> neighbours;
+	ArrayList<ArrayList<Integer>> neighbours;
     
     void readBipartiteGraph() {
 		// Läs antal hörn och kanter
@@ -56,7 +55,7 @@ public class BipRed3 {
 		e = e + x + y;
 		s = v - 1;
 		t = v;
-		
+
 		// Debugutskrift
 		System.err.println("Skickade iväg flödesgrafen");
     }
@@ -72,9 +71,9 @@ public class BipRed3 {
         while (queue.size() != 0) { 
             int x = queue.poll();
 
-            LinkedList<Integer> node = neighbours.get(x);
+            ArrayList<Integer> node = neighbours.get(x);
             for (int i = 0; i < node.size(); i++) {
-                if (visited[node.get(i)] == false && cf.get(x*10000 + node.get(i)) > 0) {
+                if (visited[node.get(i)] == false && cf.get(x*100000 + node.get(i)) > 0) {
                     if (node.get(i) == t) {
                         path[node.get(i)] = x;
                         return true;
@@ -93,19 +92,15 @@ public class BipRed3 {
         s = s - 1;
         t = t - 1;
 
-        //10000*u + v
-        //111110000
-
         c = new HashMap<Integer, Integer>();
         f = new HashMap<Integer, Integer>();
         cf = new HashMap<Integer, Integer>();
 
-
         flowEdges = new int[e][2];
-        neighbours = new ArrayList<LinkedList<Integer>>();
+        neighbours = new ArrayList<ArrayList<Integer>>();
         
         for (int i = 0; i < v; i++) {
-            neighbours.add(new LinkedList<Integer>());
+            neighbours.add(new ArrayList<Integer>());
         }
 
 		for (int i = 0; i < x; ++i) {
@@ -114,33 +109,26 @@ public class BipRed3 {
 			flowEdges[i][0] = s;       
             flowEdges[i][1] = a;  
             
-            int key1 = s*10000 + a;
-            int key2 = a*10000 + s;
+            int key1 = s*100000 + a;
+            int key2 = a*100000 + s;
             
             c.put(key1, 1);    
-            f.put(key1, 0); 
-            f.put(key2, 0); 
-            cf.put(key1, 1); 
-            cf.put(key2, 0);
-            //cf.put(key1, c.get(key1)); 
-            //cf.put(key2, c.get(key2));
-
-            /*f[s][a] = 0;        	// f[u,v] = 0
-            f[a][s] = 0;        	// f[v,u] = 0
-            cf[s][a] = c[s][a];     // cf[u,v] = c[u,v]
-            cf[a][s] = c[a][s]; 	// cf[v,u] = c[v,u]*/
+            f.put(key1, 0);     // f[u,v] = 0
+            f.put(key2, 0);     // f[v,u] = 0
+            cf.put(key1, 1);    // cf[u,v] = c[u,v]
+            cf.put(key2, 0);    // cf[v,u] = c[v,u]
 
             neighbours.get(s).add(a);
             neighbours.get(a).add(s);
 		}
 		for (int i = x; i < e - y; ++i) {
-			int a = edges[i - x][0] - 1, b = edges[i - x][1] - 1; //första felet pga index lmao
+			int a = edges[i - x][0] - 1, b = edges[i - x][1] - 1;
 			// Kant från a till b med kapacitet c
 			flowEdges[i][0] = a;       
             flowEdges[i][1] = b;  
 
-            int key1 = a*10000 + b;
-            int key2 = b*10000 + a;  
+            int key1 = a*100000 + b;
+            int key2 = b*100000 + a;  
 
             c.put(key1, 1); 
             f.put(key1, 0); 
@@ -157,8 +145,8 @@ public class BipRed3 {
 			flowEdges[i][0] = b;       
             flowEdges[i][1] = t;  
             
-            int key1 = b*10000 + t;
-            int key2 = t*10000 + b; 
+            int key1 = b*100000 + t;
+            int key2 = t*100000 + b; 
 
             c.put(key1, 1); 
             f.put(key1, 0); 
@@ -179,30 +167,27 @@ public class BipRed3 {
             int b = t;                      // b = v
             while (b != s) {
                 int a = path[b];
-                //r = Math.min(cf[a][b], r);
-                r = Math.min(cf.get(a*10000 + b), r);
+                r = Math.min(cf.get(a*100000 + b), r);  //r = Math.min(cf[a][b], r);
                 b = a;
             }
-
             b = t;
             while (b != s) {
                 int a = path[b];
-                //f[a][b] += r;
-                f.put(a*10000 + b, f.get(a*10000 + b) + r);
-                //f[b][a] = -f[a][b];
-                f.put(b*10000 + a, -f.get(a*10000 + b));
-                //cf[a][b] = c[a][b] - f[a][b];
-                Integer newC = c.get(a*10000 + b);
+                int hashAB = a*100000 + b;
+                int hashBA = b*100000 + a;
+                
+                Integer newC = c.get(hashAB), newC2 = c.get(hashBA);
                 if (newC == null) {
                     newC = 0;
                 }
-                Integer newC2 = c.get(b*10000 + a);
                 if (newC2 == null) {
                     newC2 = 0;
                 }
-                cf.put(a*10000 + b, newC - f.get(a*10000 + b));
-                //cf[b][a] = c[b][a] - f[b][a];
-                cf.put(b*10000 + a, newC2 - f.get(b*10000 + a));
+
+                f.put(hashAB, f.get(hashAB) + r);       //f[a][b] += r;
+                f.put(hashBA, -f.get(hashAB));          //f[b][a] = -f[a][b];
+                cf.put(hashAB, newC - f.get(hashAB));   //cf[a][b] = c[a][b] - f[a][b];
+                cf.put(hashBA, newC2 - f.get(hashBA));  //cf[b][a] = c[b][a] - f[b][a];
 
                 b = a;
             }
@@ -213,18 +198,17 @@ public class BipRed3 {
     
     void readMaxFlowSolution() {
 		// Läs in antal hörn, kanter, källa, sänka, och totalt flöde
-		// (Antal hörn, källa och sänka borde vara samma som vi i grafen vi
-		// skickade iväg)
+		// (Antal hörn, källa och sänka borde vara samma som vi i grafen vi skickade iväg)
 
 		flowSolution = new int[totflow][3];	
 
 		int j = 0;
 		for (int i = 0; i < e; ++i) {
 			// Flöde f från a till b
-			if (f.get(flowEdges[i][0]*10000 + flowEdges[i][1]) > 0) {
+			if (f.get(flowEdges[i][0]*100000 + flowEdges[i][1]) > 0) {
 				int a = flowEdges[i][0];
 				int b = flowEdges[i][1];
-				int flowf = f.get(flowEdges[i][0]*10000 + flowEdges[i][1]);
+				int flowf = f.get(flowEdges[i][0]*100000 + flowEdges[i][1]);
 				if (!(a == s || b == t)) {
 					flowSolution[j][0] = a;
 					flowSolution[j][1] = b;
@@ -233,7 +217,7 @@ public class BipRed3 {
 				}
 			}
 		}
-		totflow = j;	//antalet kanter som har flow mellan sig mellan x och y hörnen
+		totflow = j;	// Antalet kanter som har flöde mellan sig mellan x och y hörnen
     }
     
     
@@ -245,12 +229,11 @@ public class BipRed3 {
 		io.println(maxMatch);
 		
 		for (int i = 0; i < totflow; ++i) {
-			int a = flowSolution[i][0] + 1, b = flowSolution[i][1] + 1;  //andra felet pga index
+			int a = flowSolution[i][0] + 1, b = flowSolution[i][1] + 1; 
 			// Kant mellan a och b ingår i vår matchningslösning (har flöde 1)
 			io.println(a + " " + b);
 		}
         io.flush();
-	
     }
     
     BipRed3() {
