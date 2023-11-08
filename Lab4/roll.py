@@ -8,13 +8,17 @@ singleNodes = [0] * V
 
 for i in range(E):
     u, v = map(int, input().split())
-    singleNodes[u] = 1
-    singleNodes[v] = 1
+    singleNodes[u - 1] = 1
+    singleNodes[v - 1] = 1
     edges.append([u,v])
 
 extraNode = 0
+print('signle nodes')
+print(singleNodes)
+print()
 for i in range(V):
     if singleNodes[i] == 0:
+        print('empty node')
         V += 1
         E += 1
         extraNode += 1
@@ -40,7 +44,7 @@ for i in range(V):
     print(str(m) + ' ' + allActors)
 
 #Vilka roller som ingår i vilka scener
-for i in range(E - 1 - extraNode):
+for i in range(E - 1):
     print(str(2) + ' ' + str(edges[i][0]) + ' ' + str(edges[i][1]))
 '''if extraNode > 0:
     print(str(2) + ' ' + str(edges[0][0]) + ' ' + str(edges[0][1]))'''
