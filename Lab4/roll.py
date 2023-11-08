@@ -17,7 +17,8 @@ for i in range(V):
         V += 1
         E += 1
         edges.append([i + 1, V])
-        m += 1
+        if m == 3:
+            m += 1
 V += 2
 E += 1
 
@@ -25,11 +26,13 @@ print(V)
 print(E)
 print(m)
 #Vilka skådisar som kan ta vilka roller 
-allActors = ''
-for i in range(m):
-    allActors += str(i + 1) + ' '
-for i in range(V):
-    print(str(m) + ' ' + allActors)
+allActorsExceptOneDiva = ''
+for i in range(m - 2):
+    allActorsExceptOneDiva += str(i + 2) + ' '
+for i in range(V - 2):
+    print(str(m - 2) + ' ' + allActorsExceptOneDiva)
+print('2 1 ' + str(m))
+print('2 1 ' + str(m))
 
 #Vilka roller som ingår i vilka scener
 for i in range(E - 1):
