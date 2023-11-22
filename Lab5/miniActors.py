@@ -11,14 +11,15 @@ invalidNodes = []
 
 # Read what actors can be which roles
 for _ in range(V):
+    a = map(int, input().split())
     actors = []
-    for _ in range(int(input())):
-        actors.append(int(input()))
+    for i in a:
+        actors.append(a[i + 1])
     roleList.append(actors)
 
 # Read what roles can be in which scens
 for _ in range(E):
-    u, v = map(int, input().split())
+    n, u, v = map(int, input().split())
     edgesList.append([u,v])
 
 for i in range(E):
@@ -36,18 +37,17 @@ for i in range(len(checkEdges)):
             actorsRoles[1] = [2, i + 1]
             break
 
-diva1 = 1
-diva2 = 0
-for i in range(2):  # NOT WORKING FOR 2 DIVAS
+od = [1, 0]
+for i in range(2): 
     potenialNodes = []
     for node in edgesList:
-        if node[0] == actorsRoles[0][1] or node[1] == actorsRoles[0][1]:
+        if node[0] == actorsRoles[i][1] or node[1] == actorsRoles[i][1]:
             invalidNodes.append(node[0])
             invalidNodes.append(node[1])
-        if node[0] == actorsRoles[1][1] or node[1] == actorsRoles[1][1]:
+        if node[0] == actorsRoles[od[i]][1] or node[1] == actorsRoles[od[i]][1]:
             invalidNodes.append(node[0])
             invalidNodes.append(node[1])
-        if (node[0] != actorsRoles[0][1] and node[0] != actorsRoles[1][1]) or (node[1] != actorsRoles[0][1] and node[1] != actorsRoles[1][1]):
+        if (node[0] != actorsRoles[i][1] and node[0] != actorsRoles[od[i]][1]) or (node[1] != actorsRoles[i][1] and node[1] != actorsRoles[od[i]][1]):
             potenialNodes.append([node[0], node[1]])
 
     for node in potenialNodes:
@@ -59,4 +59,5 @@ for i in range(2):  # NOT WORKING FOR 2 DIVAS
             if node[1] in roleList[0]:
                 actorsRoles[0].append(node[1])
                 invalidNodes.append(node[0])
-                
+
+print(actorsRoles)
