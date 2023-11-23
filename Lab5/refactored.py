@@ -1,4 +1,3 @@
-
 nbrOfRoles = int(input())
 nbrOfScenes = int(input())
 nbrOfActors = int(input())
@@ -24,24 +23,31 @@ for _ in range(nbrOfScenes):
 for i in range(len(rolesActors)):
     for j in range(len(rolesActors[i])):
         roleCounter[rolesActors[i][j] - 1] += 1
-roleCounter.pop(0)  # We do not need to include diva 1 and 2
-roleCounter.pop(0)
+bestDiva1 = roleCounter.pop(0)  
+bestDiva2 = roleCounter.pop(0)
+
+bestDiva = 1
+worseDiva = 2
+if bestDiva1 < bestDiva2:
+    bestDiva = 2
+    worseDiva = 1
 
 # find roles for the divas
 diva1Count = 0
 found = False
 invalidRolesDivas = set() # behöver nog inte lägga in de i början
 for i in range(nbrOfRoles):
-    if 1 in rolesActors[i]:
+    if bestDiva in rolesActors[i]:
         for j in range(nbrOfScenes):
             if (i + 1) in scenesRoles[j]:
                 invalidRolesDivas.update(scenesRoles[j])
         #print(invalidRolesDivas)
         for l in range(nbrOfRoles):
-            if not((l + 1) in invalidRolesDivas) and (2 in rolesActors[l]):
-                actorRoleAnswer[1] = [l + 1]
+            if not((l + 1) in invalidRolesDivas) and (worseDiva in rolesActors[l]):
+                actorRoleAnswer[worseDiva - 1] = [l + 1]
                 allAssingedRoles.append(l + 1)
-                actorRoleAnswer[0] = [i + 1]
+                actorRoleAnswer[bestDiva - 1] = [i + 1]
+                #print(actorRoleAnswer)
                 allAssingedRoles.append(i + 1)
                 found = True
                 break

@@ -1,4 +1,3 @@
-import random
 nbrOfRoles = int(input())
 nbrOfScenes = int(input())
 nbrOfActors = int(input())
@@ -37,36 +36,25 @@ if bestDiva1 < bestDiva2:
 diva1Count = 0
 found = False
 invalidRolesDivas = set() # behöver nog inte lägga in de i början
-#for i in range(nbrOfRoles):
-while not found:
-    #if bestDiva in rolesActors[i]:
-    rndRole = random.randint(0, nbrOfRoles - 1)
-    while True:
-        if bestDiva in rolesActors[rndRole]:
-            for j in range(nbrOfScenes):
-                if (i + 1) in scenesRoles[j]:
-                    invalidRolesDivas.update(scenesRoles[j])
-        elif rndRole < nbrOfRoles - 1:
-            rndRole += 1
-        else:
-            rndRole = 0
-
-        '''for j in range(nbrOfScenes):
+for i in range(nbrOfRoles):
+    if bestDiva in rolesActors[i]:
+        for j in range(nbrOfScenes):
             if (i + 1) in scenesRoles[j]:
-                invalidRolesDivas.update(scenesRoles[j])'''
+                invalidRolesDivas.update(scenesRoles[j])
+        #print(invalidRolesDivas)
         for l in range(nbrOfRoles):
-            print('hej')
             if not((l + 1) in invalidRolesDivas) and (worseDiva in rolesActors[l]):
                 actorRoleAnswer[worseDiva - 1] = [l + 1]
                 allAssingedRoles.append(l + 1)
                 actorRoleAnswer[bestDiva - 1] = [i + 1]
+                #print(actorRoleAnswer)
                 allAssingedRoles.append(i + 1)
                 found = True
                 break
         if len(allAssingedRoles) == 0:
             invalidRolesDivas.clear()
         if found:
-           break
+            break
 
 # Find more roles for diva 1 and 2
 for i in range(nbrOfScenes):
