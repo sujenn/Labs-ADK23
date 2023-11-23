@@ -1,13 +1,10 @@
+
+# Input 
+scenesRoles = []
+rolesActors = []
 nbrOfRoles = int(input())
 nbrOfScenes = int(input())
 nbrOfActors = int(input())
-
-rolesActors = []
-scenesRoles = []
-
-roleCounter = [0] * nbrOfActors # The index is the actor and a number of roles the actor can have at that index #KOLLA OM LÄNGD ÄR RÄTT
-actorRoleAnswer = [[] for _ in range(nbrOfRoles * 2 + 1)]  
-allAssingedRoles = []
 
 for _ in range(nbrOfRoles):
     vRow = list(map(int, input().split()))
@@ -19,6 +16,19 @@ for _ in range(nbrOfScenes):
     eRow.pop(0)
     scenesRoles.append(eRow)
 
+
+roleCounter = [0] * nbrOfActors # The index is the actor and a number of roles the actor can have at that index #KOLLA OM LÄNGD ÄR RÄTT
+actorRoleAnswer = [[] for _ in range(nbrOfRoles * 2 + 1)]  
+allAssingedRoles = []
+
+def helpFindMoreRoles(actor):
+    global actorRoleAnswer, allAssingedRoles
+    actorRoleAnswer[actor - 1].append(i + 1)
+    allAssingedRoles.append(i + 1)
+    for j in range(nbrOfScenes):
+        if (i + 1) in scenesRoles[j]:
+            return scenesRoles[j]
+        
 # For finding the actor that can play the most roles
 for i in range(len(rolesActors)):
     for j in range(len(rolesActors[i])):
@@ -35,19 +45,17 @@ if bestDiva1 < bestDiva2:
 # find roles for the divas
 diva1Count = 0
 found = False
-invalidRolesDivas = set() # behöver nog inte lägga in de i början
+invalidRolesDivas = set() 
 for i in range(nbrOfRoles):
     if bestDiva in rolesActors[i]:
         for j in range(nbrOfScenes):
             if (i + 1) in scenesRoles[j]:
                 invalidRolesDivas.update(scenesRoles[j])
-        #print(invalidRolesDivas)
         for l in range(nbrOfRoles):
             if not((l + 1) in invalidRolesDivas) and (worseDiva in rolesActors[l]):
                 actorRoleAnswer[worseDiva - 1] = [l + 1]
                 allAssingedRoles.append(l + 1)
                 actorRoleAnswer[bestDiva - 1] = [i + 1]
-                #print(actorRoleAnswer)
                 allAssingedRoles.append(i + 1)
                 found = True
                 break
@@ -98,11 +106,8 @@ for i in range(len(roleCounter)):
         # Look for all roles 
         for i in range(nbrOfRoles):
             if not((i + 1) in invalidRolesActor) and (currentBestActor in rolesActors[i]) and not((i + 1) in allAssingedRoles):
-                actorRoleAnswer[currentBestActor - 1].append(i + 1)
-                allAssingedRoles.append(i + 1)
-                for j in range(nbrOfScenes):
-                    if (i + 1) in scenesRoles[j]:
-                        invalidRolesActor.update(scenesRoles[j])
+                invalidRolesActor.update(helpFindMoreRoles(currentBestActor))
+
 # Add super actors
 rolesNotAssigned = []
 for i in range(nbrOfRoles):
