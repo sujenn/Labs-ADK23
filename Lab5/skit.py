@@ -10,29 +10,10 @@ roleCounter = [0] * nbrOfActors # The index is the actor and a number of roles t
 actorRoleAnswer = [[] for _ in range(nbrOfRoles * 2 + 1)]  
 allAssingedRoles = []
 
-scenesRoles.append([1, 3])
-
-'''
-#build max scenes
-for i in range(4000):
-    stringScene = ''
-    for j in range(1, 600):
-        stringScene += str(j + 1) + ' '
-    eRow = list(map(int, stringScene.split()))
-    scenesRoles.append(eRow)
-
-for i in range(600):
-    sb = ''
-    for j in range(400):
-        sb += str(j + 1) + ' '
-    vRow = list(map(int, sb.split()))
-    rolesActors.append(vRow)
-'''
 for _ in range(nbrOfRoles):
     vRow = list(map(int, input().split()))
     vRow.pop(0)
     rolesActors.append(vRow)
-
 
 for _ in range(nbrOfScenes):
     eRow = list(map(int, input().split()))
@@ -64,8 +45,8 @@ for i in range(nbrOfRoles):
                 allAssingedRoles.append(i + 1)
                 found = True
                 break
-        '''if len(allAssingedRoles) == 0:
-            invalidRolesDivas.clear()'''
+        if len(allAssingedRoles) == 0:
+            invalidRolesDivas.clear()
         if found:
             break
 
@@ -98,7 +79,7 @@ for i in range(len(roleCounter)):
         if (currentBestActor in rolesActors[rowRolesActors]) and not((rowRolesActors + 1) in allAssingedRoles):
             actorRoleAnswer[currentBestActor - 1].append(rowRolesActors + 1)
             allAssingedRoles.append(rowRolesActors + 1)
-            invalidRolesActor.update([rowRolesActors + 1])   #KAN VARA FEL
+            invalidRolesActor.update([rowRolesActors + 1])  
             foundActor = True
             break
     # Look for more roles for currentBestActor
