@@ -1,23 +1,22 @@
+# Input 
 nbrOfRoles = int(input())
 nbrOfScenes = int(input())
 nbrOfActors = int(input())
 
-rolesActors = []
-scenesRoles = []
+# Read input for rolesActors and scenesRoles
+def helpReadInput(numberOf):
+    myList = []
+    for _ in range(numberOf):
+        row = list(map(int, input().split()))
+        row.pop(0)
+        myList.append(row)
+    return myList
+rolesActors = helpReadInput(nbrOfRoles)
+scenesRoles = helpReadInput(nbrOfScenes)
 
-roleCounter = [0] * nbrOfActors # The index is the actor and a number of roles the actor can have at that index
+roleCounter = [0] * nbrOfActors # The index is the actor and a number of roles the actor can have at that index #KOLLA OM LÄNGD ÄR RÄTT
 actorRoleAnswer = [[] for _ in range(nbrOfRoles * 2 + 1)]  
 allAssingedRoles = []
-
-for _ in range(nbrOfRoles):
-    vRow = list(map(int, input().split()))
-    vRow.pop(0)
-    rolesActors.append(vRow)
-
-for _ in range(nbrOfScenes):
-    eRow = list(map(int, input().split()))
-    eRow.pop(0)
-    scenesRoles.append(eRow)
 
 # For finding the actor that can play the most roles
 for i in range(len(rolesActors)):
